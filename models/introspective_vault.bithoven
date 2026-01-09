@@ -1,0 +1,16 @@
+pragma bithoven version 0.0.1;
+pragma bithoven target taproot;
+
+/* 
+ * Reference Implementation for an Introspective SBA Vault.
+ * Ensures that the physical spend (Path 1) is only possible if 
+ * the witness satisfies the semantic equalizer constraint.
+ */
+(sig_user: signature, state_commitment: string)
+{
+    // Ensure the physical output matches the semantic intent
+    verify sha256(state_commitment) == "commitment_hash_from_op_return";
+    
+    // Validates that only the authorized sovereign key can move the resource
+    return checksig(sig_user, <PUBLIC_KEY>);
+}
